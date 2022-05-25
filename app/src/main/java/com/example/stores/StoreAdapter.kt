@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.stores.databinding.ItemStoreBinding
 
 //Version 1
-class StoreAdapter(private var stores:MutableList<Store>, private var listener: OnClickListener) :
+class StoreAdapter(private var stores:MutableList<StoreEntity>, private var listener: OnClickListener) :
     RecyclerView.Adapter<StoreAdapter.ViewHolder>(){
 
     private lateinit var mContext : Context
@@ -33,8 +33,8 @@ class StoreAdapter(private var stores:MutableList<Store>, private var listener: 
 
     override fun getItemCount(): Int = stores.size
 
-    fun add(store: Store) {
-        stores.add(store)
+    fun add(storeEntity: StoreEntity) {
+        stores.add(storeEntity)
         //Con notifyDataSetChanged se refresca la pantalla
         notifyDataSetChanged()
     }
@@ -42,8 +42,8 @@ class StoreAdapter(private var stores:MutableList<Store>, private var listener: 
     inner class ViewHolder(view:View) : RecyclerView.ViewHolder(view){
         val binding = ItemStoreBinding.bind(view)
 
-        fun setListener(store: Store){
-            binding.root.setOnClickListener { listener.onClick(store) }
+        fun setListener(storeEntity: StoreEntity){
+            binding.root.setOnClickListener { listener.onClick(storeEntity) }
         }
 
     }
