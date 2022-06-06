@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stores.databinding.ItemStoreBinding
 
-//Version 1
 class StoreAdapter(private var stores:MutableList<StoreEntity>, private var listener: OnClickListener) :
     RecyclerView.Adapter<StoreAdapter.ViewHolder>(){
 
@@ -28,10 +27,16 @@ class StoreAdapter(private var stores:MutableList<StoreEntity>, private var list
         with(holder){
             setListener(store)
             binding.tvName.text = store.name
+            binding.cbFavorite.isChecked = store.isFavorite
         }
     }
 
     override fun getItemCount(): Int = stores.size
+
+    fun setStores(stores: MutableList<StoreEntity>) {
+        this.stores = stores
+        notifyDataSetChanged()
+    }
 
     fun add(storeEntity: StoreEntity) {
         stores.add(storeEntity)
@@ -39,18 +44,37 @@ class StoreAdapter(private var stores:MutableList<StoreEntity>, private var list
         notifyDataSetChanged()
     }
 
-    fun setStores(stores: MutableList<StoreEntity>) {
-        this.stores = stores
-        notifyDataSetChanged()
+    fun update(storeEntity: StoreEntity) {
+        val index = stores.indexOf(storeEntity)
+        if (index != -1){
+            stores.set(index, storeEntity)
+            notifyItemChanged(index)
+        }
+    }
+
+    fun delete(storeEntity: StoreEntity) {
+        val index = stores.indexOf(storeEntity)
+        if (index != -1){
+            stores.removeAt(index)
+            notifyItemRemoved(index)
+        }
     }
 
     inner class ViewHolder(view:View) : RecyclerView.ViewHolder(view){
         val binding = ItemStoreBinding.bind(view)
 
         fun setListener(storeEntity: StoreEntity){
-            binding.root.setOnClickListener { listener.onClick(storeEntity) }
+            with(binding.root){
+                setOnClickListener { listener.onClick(storeEntity) }
+                setOnLongClickListener {
+                    listener.onDeleteStore(storeEntity)
+                    true
+                }
+            }
+            binding.cbFavorite.setOnClickListener {
+                listener.onFavoriteStore(storeEntity)
+            }
         }
-
     }
 
 }

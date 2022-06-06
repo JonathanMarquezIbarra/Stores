@@ -2,9 +2,11 @@ package com.example.stores
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.annotation.UiThread
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.stores.databinding.ActivityMainBinding
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.runOnUiThread
 import org.jetbrains.anko.uiThread
 
 class MainActivity : AppCompatActivity(), OnClickListener {
@@ -56,5 +58,25 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     // OnClickListener
     override fun onClick(storeEntity: StoreEntity) {
         TODO("Not yet implemented")
+    }
+
+    override fun onFavoriteStore(storeEntity: StoreEntity) {
+        storeEntity.isFavorite = !storeEntity.isFavorite
+
+        doAsync{
+            StoreApplication.database.storeDao().updateStore(storeEntity)
+            uiThread{
+                mAdapter.update(storeEntity)
+            }
+        }
+    }
+
+    override fun onDeleteStore(storeEntity: StoreEntity) {
+        doAsync {
+            StoreApplication.database.storeDao().deleteStore(storeEntity)
+            uiThread {
+                mAdapter.delete(storeEntity)
+            }
+        }
     }
 }
