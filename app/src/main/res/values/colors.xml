@@ -9,4 +9,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="color_white_t">#CCFFFFFF</color>
     <color name="color_link">#0D47A1</color>
+
+
+    <color name="primaryColor">#009688</color>
+    <color name="primaryDarkColor">#00675b</color>
+    <color name="secondaryColor">#ef5350</color>
+    <color name="secondaryDarkColor">#b61827</color>
 </resources>
